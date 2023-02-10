@@ -1,24 +1,31 @@
 <script>
 import { mapState, mapActions } from "pinia";
+import { useBintoroStore } from "../stores/store";
 import SosmedComponent from "../components/SosmedComponent.vue";
 import NavbarComponent from "../components/NavbarComponent.vue";
 
 export default {
   name: "ArticleView",
   computed: {
-    // ...mapState(useMovieStore, []),
+    ...mapState(useBintoroStore, ["articleDetail", "articles"]),
   },
   data() {
-    return {};
+    return {
+      id: this.$route.params.id,
+    };
   },
   components: {
     SosmedComponent,
     NavbarComponent,
   },
   methods: {
-    // ...mapActions(useMovieStore, []),
+    ...mapActions(useBintoroStore, ["fetchArticleById", "fetchArticles"]),
   },
-  created() {},
+  created() {
+    console.log(this.$route.params.id, "params");
+    this.fetchArticleById(this.id);
+    this.fetchArticles();
+  },
 };
 </script>
 <template>
@@ -37,7 +44,9 @@ export default {
         class="d-flex align-items-center ms-5"
       >
         <div>
-          <h1 style="color: white; opacity: 1 !important">News and Articles</h1>
+          <h1 style="color: white; opacity: 1 !important">
+            {{ articleDetail.title }}
+          </h1>
         </div>
       </div>
     </div>
@@ -46,41 +55,28 @@ export default {
     <div class="row" style="height: 500px">
       <div class="h-100 col-8">
         <div class="card mb-5 ms-4 mt-4 shadow">
-          <img
-            src="https://arsitagx-master-article.s3.ap-southeast-1.amazonaws.com/article-photo/969/Colorbond-artikel-cover.jpg"
-            class="card-img-top"
-            alt="..."
-          />
+          <img :src="articleDetail.imgUrl" class="card-img-top" alt="..." />
           <div class="card-body m-3">
-            <a
-              id="card-title-link"
-              style="text-decoration: none; color: black; transition: 0.3s"
-              href="#"
-              ><h5 class="card-title">
-                Colorbond Indonesia: Menjawab Kebutuhan Konsep Arsitektur Modern
-                Masa Depan
-              </h5></a
-            >
             <p class="card-text">
-              <small class="text-muted">Arsitag</small>
+              <small class="text-muted">{{ articleDetail.author }}</small>
             </p>
             <p class="card-text">
-              Para ilmuwan telah sepakat bahwa perilaku manusia, termasuk dalam
-              mendesain bangunan dan lingkungan, turut berperan serta dalam
-              memicu terjadinya perubahan iklim. Oleh karena itu, penting sekali
-              untuk memikirkan cara-cara baru dalam mendesain bangunan dan
-              lingkungan dengan metode yang lebih ramah lingkungan.
+              {{ articleDetail.content }}
             </p>
           </div>
         </div>
       </div>
       <div class="h-100 col-4">
         <h2 class="mt-3" style="color: black">Artikel terbaru</h2>
-        <div style="height: 130px" class="row mt-3 mb-4">
+        <div
+          v-for="articles in articles"
+          style="height: 130px"
+          class="row mt-3 mb-4"
+        >
           <div class="col-4 d-flex align-items-center">
             <img
               style="width: 120px; height: 80px"
-              src="https://arsitagx-master-article.s3.ap-southeast-1.amazonaws.com/article-photo/969/Colorbond-artikel-cover.jpg"
+              :src="articles.imgUrl"
               alt="..."
             />
           </div>
@@ -92,12 +88,11 @@ export default {
                 style="text-decoration: none; color: black; transition: 0.3s"
               >
                 <h6 class="mt-2">
-                  Colorbond Indonesia: Menjawab Kebutuhan Konsep Arsitektur
-                  Modern Masa Depan
+                  {{ articles.title }}
                 </h6>
               </a>
               <p class="card-text" style="margin-top: -5px">
-                <small class="text-muted">Arsitag</small>
+                <small class="text-muted">{{ articles.author }}</small>
               </p>
             </div>
           </div>

@@ -57,6 +57,7 @@ export default {
               id="card-title-link"
               style="text-decoration: none; color: black; transition: 0.3s"
               href="#"
+              @click.prevent="changePage(`/articles/${articles.id}`)"
               ><h5 class="card-title">
                 {{ articles.title }}
               </h5></a

@@ -21,6 +21,15 @@ export const useBintoroStore = defineStore("bintoro", {
         console.log(error);
       }
     },
-    async fetchArticleById(id) {},
+    async fetchArticleById(id) {
+      try {
+        const { data } = await axios.get(`articles/${id}`);
+        console.log(data, "ini dr store by id");
+
+        this.articleDetail = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 });
