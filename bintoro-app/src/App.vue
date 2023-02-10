@@ -6,4 +6,8 @@ import { RouterView } from "vue-router";
   <RouterView />
 </template>
 
-<style></style>
+<style>
+* {
+  font-family: "Rubik", sans-serif;
+}
+</style>
