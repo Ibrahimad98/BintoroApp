@@ -14,7 +14,12 @@ export default {
     NavbarComponent,
   },
   methods: {
-    ...mapActions(useBintoroStore, ["changePage", "fetchArticles"]),
+    ...mapActions(useBintoroStore, [
+      "changePage",
+      "fetchArticles",
+      "deleteArticle",
+      "editArticle",
+    ]),
   },
   computed: {
     ...mapState(useBintoroStore, ["articles"]),
@@ -63,7 +68,7 @@ export default {
               </h5></a
             >
             <p class="card-text">
-              <small class="text-muted">Arsitag</small>
+              <small class="text-muted">{{ articles.author }}</small>
             </p>
             <p class="card-text">
               {{
@@ -72,6 +77,30 @@ export default {
                 " [...]"
               }}
             </p>
+            <div class="d-flex">
+              <a
+                class="me-4"
+                id="delete-label"
+                href="#"
+                style="text-decoration: none; color: red"
+                @click.prevent="deleteArticle(articles.id)"
+              >
+                <div class="d-flex">
+                  <span class="material-icons"> delete </span>
+                  <p class="ms-1">delete this article</p>
+                </div>
+              </a>
+              <a
+                id="edit-label"
+                href="#"
+                style="text-decoration: none; color: #0ea5e9"
+                @click.prevent="changePage(`/editForm/${articles.id}`)"
+                ><div class="d-flex">
+                  <span class="material-icons"> edit </span>
+                  <p class="ms-1">edit this article</p>
+                </div></a
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -118,6 +147,14 @@ export default {
 }
 #card-title-link :hover {
   color: #ff8a00;
+  transition: 0.3s;
+}
+#delete-label :hover {
+  color: darkred;
+  transition: 0.3s;
+}
+#edit-label :hover {
+  color: #0369a1;
   transition: 0.3s;
 }
 </style>

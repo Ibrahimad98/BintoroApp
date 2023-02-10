@@ -25,7 +25,7 @@ export default {
             @click.prevent="changePage('/addForm')"
             style="text-decoration: none"
             class="justify-content-start text-light"
-            ><strong>Add Product</strong></a
+            ><strong>Add an article</strong></a
           >
         </div>
       </div>

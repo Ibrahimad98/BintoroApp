@@ -1,33 +1,32 @@
 <script>
 import SosmedComponent from "../components/SosmedComponent.vue";
 import NavbarComponent from "../components/NavbarComponent.vue";
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { useBintoroStore } from "../stores/store";
 
 export default {
-  name: "ArticleFormView",
+  name: "ArticleEditFormView",
   components: {
     SosmedComponent,
     NavbarComponent,
   },
   data() {
     return {
-      articleData: {
-        title: "",
-        content: "",
-        imgUrl: "",
-        author: "",
-      },
+      id: this.$route.params.id,
     };
   },
+  computed: {
+    ...mapState(useBintoroStore, ["articleDetail"]),
+  },
   methods: {
-    ...mapActions(useBintoroStore, ["addArticle"]),
+    ...mapActions(useBintoroStore, ["editArticle", "fetchArticleById"]),
 
     submitForm() {
-      // console.log(this.articleData.title);
-      // console.log("form input");
-      this.addArticle(this.articleData);
+      this.editArticle(this.id, this.articleDetail);
     },
+  },
+  created() {
+    this.fetchArticleById(this.id);
   },
 };
 </script>
@@ -47,7 +46,7 @@ export default {
         class="d-flex align-items-center ms-5"
       >
         <div>
-          <h1 style="color: white; opacity: 1 !important">Add an Article</h1>
+          <h1 style="color: white; opacity: 1 !important">Edit an Article</h1>
         </div>
       </div>
     </div>
@@ -57,7 +56,7 @@ export default {
           <p for="title-input" style="margin-bottom: -2px">Title</p>
           <input
             required
-            v-model="articleData.title"
+            v-model="articleDetail.title"
             class="form-control"
             type="text"
             placeholder="input title here"
@@ -67,7 +66,7 @@ export default {
           <p for="image-input" style="margin-bottom: -2px">Image</p>
           <input
             required
-            v-model="articleData.imgUrl"
+            v-model="articleDetail.imgUrl"
             class="form-control"
             type="url"
             placeholder="input image here"
@@ -77,7 +76,7 @@ export default {
           <p for="content-input" style="margin-bottom: -2px">Content</p>
           <textarea
             required
-            v-model="articleData.content"
+            v-model="articleDetail.content"
             class="form-control"
             placeholder="input content here"
           ></textarea>
@@ -86,7 +85,7 @@ export default {
           <p for="author-input" style="margin-bottom: -2px">Author</p>
           <input
             required
-            v-model="articleData.author"
+            v-model="articleDetail.author"
             class="form-control"
             type="text"
             placeholder="input author here"
