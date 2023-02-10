@@ -1,13 +1,11 @@
 <script>
 import { mapState, mapActions } from "pinia";
+import { useBintoroStore } from "../stores/store";
 import SosmedComponent from "../components/SosmedComponent.vue";
 import NavbarComponent from "../components/NavbarComponent.vue";
 
 export default {
   name: "HomeView",
-  computed: {
-    // ...mapState(useMovieStore, []),
-  },
   data() {
     return {};
   },
@@ -16,12 +14,19 @@ export default {
     NavbarComponent,
   },
   methods: {
-    // ...mapActions(useMovieStore, []),
+    ...mapActions(useBintoroStore, ["changePage", "fetchArticles"]),
   },
-  created() {},
+  computed: {
+    ...mapState(useBintoroStore, ["articles"]),
+  },
+  created() {
+    this.fetchArticles();
+    console.log(this.articles, "<>><<><><<><><><><><<><><><><>>,.");
+  },
 };
 </script>
 <template>
+  <!-- {{ JSON.stringify(articles) }} -->
   <SosmedComponent />
   <NavbarComponent />
   <div>
@@ -45,42 +50,71 @@ export default {
   <div>
     <div class="row" style="height: 500px">
       <div class="h-100 col-8">
-        <div class="card mb-3 ms-4 mt-4">
-          <img
-            src="https://arsitagx-master-article.s3.ap-southeast-1.amazonaws.com/article-photo/969/Colorbond-artikel-cover.jpg"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
+        <div v-for="articles in articles" class="card mb-5 ms-4 mt-4 shadow">
+          <img :src="articles.imgUrl" class="card-img-top" alt="..." />
+          <div class="card-body m-3">
             <a
               id="card-title-link"
-              style="text-decoration: none; color: black"
+              style="text-decoration: none; color: black; transition: 0.3s"
               href="#"
               ><h5 class="card-title">
-                Colorbond Indonesia: Menjawab Kebutuhan Konsep Arsitektur Modern
-                Masa Depan
+                {{ articles.title }}
               </h5></a
             >
             <p class="card-text">
-              Para ilmuwan telah sepakat bahwa perilaku manusia, termasuk dalam
-              mendesain bangunan dan lingkungan, turut berperan serta dalam
-              memicu terjadinya perubahan iklim. Oleh karena itu, penting sekali
-              untuk memikirkan cara-cara baru dalam mendesain bangunan dan
-              lingkungan dengan metode yang lebih ramah lingkungan.
+              <small class="text-muted">Arsitag</small>
             </p>
             <p class="card-text">
-              <small class="text-muted">Author: Arsitag</small>
+              {{
+                articles.content.split(".")[0] +
+                articles.content.split(".")[1] +
+                " [...]"
+              }}
             </p>
           </div>
         </div>
       </div>
-      <div style="background-color: green" class="h-100 col-4">
+      <div class="h-100 col-4">
         <h2 class="mt-3" style="color: black">Artikel terbaru</h2>
+        <div
+          v-for="articles in articles"
+          style="height: 130px"
+          class="row mt-3 mb-4"
+        >
+          <div class="col-4 d-flex align-items-center">
+            <img
+              style="width: 120px; height: 80px"
+              :src="articles.imgUrl"
+              alt="..."
+            />
+          </div>
+          <div class="col-8 d-flex align-items-center">
+            <div>
+              <a
+                id="misc-news-title"
+                href="#"
+                style="text-decoration: none; color: black; transition: 0.3s"
+              >
+                <h6 class="mt-2">
+                  {{ articles.title }}
+                </h6>
+              </a>
+              <p class="card-text" style="margin-top: -5px">
+                <small class="text-muted">{{ articles.author }}</small>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 <style>
+#misc-news-title :hover {
+  color: #ff8a00;
+  transition: 0.3s;
+}
 #card-title-link :hover {
   color: #ff8a00;
   transition: 0.3s;
