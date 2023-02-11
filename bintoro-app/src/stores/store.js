@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "../config/axios";
 import Swal from "sweetalert2";
-// const localhost = "http://localhost:3000";
 
 export const useBintoroStore = defineStore("bintoro", {
   state: () => ({

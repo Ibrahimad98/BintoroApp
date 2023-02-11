@@ -1,15 +1,22 @@
 <script>
 import { mapState, mapActions } from "pinia";
+import InfiniteList from "vue3-infinite-list";
 import { useBintoroStore } from "../stores/store";
 import SosmedComponent from "../components/SosmedComponent.vue";
 import NavbarComponent from "../components/NavbarComponent.vue";
+import axios from "axios";
 
 export default {
   name: "HomeView",
   data() {
-    return {};
+    return {
+      items: [],
+      num1: 0,
+      num2: 2,
+    };
   },
   components: {
+    InfiniteList,
     SosmedComponent,
     NavbarComponent,
   },
@@ -20,18 +27,23 @@ export default {
       "deleteArticle",
       "editArticle",
     ]),
+    async loadMore() {
+      const { data } = await axios.get(`articles?_start=${num1}&_end=${num2}`);
+      this.items = [...this.items, ...data];
+      this.num1 += 2;
+      this.num2 += 2;
+    },
   },
   computed: {
     ...mapState(useBintoroStore, ["articles"]),
   },
   created() {
     this.fetchArticles();
-    console.log(this.articles, "<>><<><><<><><><><><<><><><><>>,.");
+    // console.log(this.articles, "<>><<><><<><><><><><<><><><><>>,.");
   },
 };
 </script>
 <template>
-  <!-- {{ JSON.stringify(articles) }} -->
   <SosmedComponent />
   <NavbarComponent />
   <div>
@@ -54,8 +66,12 @@ export default {
   </div>
   <div>
     <div class="row" style="height: 500px">
-      <div class="h-100 col-8">
-        <div v-for="articles in articles" class="card mb-5 ms-4 mt-4 shadow">
+      <div class="col-8">
+        <div
+          v-for="articles in articles"
+          :key="items.id"
+          class="card mb-5 ms-4 mt-4 shadow"
+        >
           <img :src="articles.imgUrl" class="card-img-top" alt="..." />
           <div class="card-body m-3">
             <a
