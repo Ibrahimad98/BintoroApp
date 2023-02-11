@@ -19,10 +19,14 @@ export default {
     NavbarComponent,
   },
   methods: {
-    ...mapActions(useBintoroStore, ["fetchArticleById", "fetchArticles"]),
+    ...mapActions(useBintoroStore, [
+      "fetchArticleById",
+      "fetchArticles",
+      "changePage",
+    ]),
   },
   created() {
-    console.log(this.$route.params.id, "params");
+    // console.log(this.$route.params.id, "params");
     this.fetchArticleById(this.id);
     this.fetchArticles();
   },
@@ -83,6 +87,7 @@ export default {
           <div class="col-8 d-flex align-items-center">
             <div>
               <a
+                @click.prevent="changePage(`/articles/${articles.id}`)"
                 id="misc-news-title"
                 href="#"
                 style="text-decoration: none; color: black; transition: 0.3s"

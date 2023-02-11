@@ -137,6 +137,7 @@ export default {
           <div class="col-8 d-flex align-items-center">
             <div>
               <a
+                @click.prevent="changePage(`/articles/${articles.id}`)"
                 id="misc-news-title"
                 href="#"
                 style="text-decoration: none; color: black; transition: 0.3s"
